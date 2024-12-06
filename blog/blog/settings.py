@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'posts'
 ]
 
 MIDDLEWARE = [
@@ -77,9 +78,17 @@ WSGI_APPLICATION = 'blog.wsgi.application'
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
 DATABASES = {
-    'default': {
+    'SQLiteDB': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
+    },
+    'default': {
+        'ENGINE': 'django.db.backends.mysql', 
+        'NAME': 'blogDB_railroadbe',
+        'USER': 'blogDB_railroadbe',
+        'PASSWORD': '306cbc5bea25679a1b37754e560f3e498b340815',
+        'HOST': 'pde5l.h.filess.io',
+        'PORT': '3305',
     }
 }
 

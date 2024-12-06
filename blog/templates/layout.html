@@ -53,6 +53,13 @@
                   >News</a
                 >
               </li>
+              <li class="nav-item">
+                <a
+                  class="nav-link {% if request.path == '/posts/' %}active{% endif %}"
+                  href="/posts"
+                  >Posts</a
+                >
+              </li>
             </ul>
             <form class="d-flex" role="search">
               <input
