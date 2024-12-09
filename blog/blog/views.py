@@ -6,6 +6,3 @@ def homepage(request):
 
 def contactpage(request):
     return render(request, "contactpage.html")
-
-def newspage(request):
-    return render(request, "newspage.html")
