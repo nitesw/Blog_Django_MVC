@@ -49,7 +49,7 @@
               <li class="nav-item">
                 <a
                   class="nav-link {% if request.path == '/news/' %}active{% endif %}"
-                  href="/news"
+                  href="{% url "news:posts" %}"
                   >News</a
                 >
               </li>
