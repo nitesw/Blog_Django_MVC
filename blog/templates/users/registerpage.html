@@ -82,4 +82,21 @@
     Already have an account?&nbsp;<a href="{% url 'users:login' %}">Login here</a>.
   </div>
 </div>
+
+{% block scripts %}
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const termsCheckbox = document.getElementById("terms");
+    const submitButton = document.getElementById("submitBtn");
+
+    const toggleSubmitButton = () => {
+      submitButton.disabled = !termsCheckbox.checked;
+    };
+
+    termsCheckbox.addEventListener("change", toggleSubmitButton);
+
+    toggleSubmitButton();
+  });
+</script>
+{% endblock %}
 {% endblock content %}

@@ -1,0 +1,30 @@
+{% extends "layout.html" %} {% block title %}Create post - Django Web MVC{% endblock %} 
+{% block content %} {% load widget_tweaks %}
+<div class="container">
+  <h1 class="text-center text-light">Create post page</h1>
+  <div class="d-flex w-100 justify-content-center">
+    <form method="POST" class="text-light row mt-4 g-4" novalidate>
+      {% csrf_token %}
+
+      <div class="col-12">
+        <label for="{{ form.title.id_for_label }}" class="form-label">Title</label>
+        {{ form.title|add_class:"form-control"|attr:"required" }}
+      </div>
+
+      <div class="col-12">
+        <label for="{{ form.description.id_for_label }}" class="form-label">Description</label>
+        {{ form.description|add_class:"form-control"|attr:"required" }}
+      </div>
+
+      <div class="col-12">
+        <label for="{{ form.image_url.id_for_label }}" class="form-label">Image Url</label>
+        {{ form.image_url|add_class:"form-control"|attr:"required" }}
+      </div>
+
+      <div class="col-6 w-100 d-flex justify-content-center">
+        <button type="submit" class="btn btn-primary">Create post</button>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock content %}

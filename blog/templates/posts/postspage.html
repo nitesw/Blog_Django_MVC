@@ -1,37 +1,98 @@
-{% extends "layout.html" %} {% block title %}News - Django Web MVC{%endblock%}
+{% extends "layout.html" %}
+
+{% block title %}
+News - Django Web MVC
+{% endblock %}
+
 {% block content %}
-<div class="container">
-  <h1 class="text-center text-light">News page</h1>
-  <div
-    class="row row-cols-1 row-cols-md-3 row-cols-lg-4 mt-4 justify-content-between"
-  >
-    {% for post in posts %}
-    <div class="card mb-4" style="width: 18rem">
-      <img
-        src="{{post.image_url}}"
-        class="card-img-top"
-        alt="{{post.title}}"
-        style="height: 150px"
-      />
-      <div class="card-body">
-        <h5 class="card-title">{{post.title}} | <span style="font-size:12px;">posted by {{post.author}}</span></h5>
-        <p class="card-text">{{post.description}}</p>
-        <a href="#" class="btn btn-primary">Read full post</a>
-      </div>
-    </div>
-    {% comment %}
-    <div class="col" style="width: 300px">
-      <img
-        class="square-image"
-        src="{{post.image_url}}"
-        alt="{{post.title}}"
-        draggable="false"
-        style="width: 300px"
-      />
-    </div>
-    {% endcomment %} {% empty %}
-    <h4>No posts available.</h4>
-    {% endfor %}
-  </div>
+<div class="container my-4 main">
+    <h1 class="text-center text-light">News</h1>
+
+    <a href="{% url 'news:create_post' %}" class="btn btn-primary mb-3" 
+       {% if not user.is_authenticated %}style="display:none;"{% endif %}>
+       Add New Post
+    </a>
+
+    <table class="table table-striped table-bordered">
+        <thead>
+            <tr>
+                <th>Image</th>
+                <th>Title</th>
+                <th>Description</th>
+                <th>Upload Date</th>
+                <th>Author</th>
+                {% if user.is_authenticated %}
+                    <th>Actions</th>
+                {% else %}
+                    <th>Like</th>
+                {% endif %}
+            </tr>
+        </thead>
+        <tbody>
+            {% for post in posts %}
+            <tr class='post'>
+                <td>
+                    <img src="{% if post.image_url %}{{ post.image_url }}{% else %}/static/image/default_image.png{% endif %}" 
+                         class="img-thumbnail" alt="{{ post.title }}" style="width:100px"/>
+                </td>
+                <td>{{ post.title }}</td>
+                <td>{{ post.description }}</td>
+                <td>{{ post.upload_date|date:"j F Y, H:i" }}</td>
+                <td>{{ post.author.username }}</td>
+                <td>
+                    {% if user.is_authenticated %}
+                        <button class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteModal" 
+                                data-id="{{ post.pk }}">
+                            <i class="bi bi-trash"></i>
+                        </button>
+                    {% else %}
+                        <button class="btn btn-dark btn-sm" data-bs-toggle="modal">
+                            <i class="bi bi-hand-thumbs-up"></i>
+                        </button>
+                    {% endif %}
+                </td>
+            </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="6" class="text-center">No posts available.</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
 </div>
-{% endblock content %}
+
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title text-light" id="deleteModalLabel">Confirm Deletion</h5>
+                <button type="button" class="btn-close text-light" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body text-light">
+                Are you sure you want to delete this post?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary text-light" data-bs-dismiss="modal">Cancel</button>
+                <form id="deleteForm" method="POST">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-danger text-light">Delete</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const deleteModal = document.getElementById('deleteModal');
+        deleteModal.addEventListener('show.bs.modal', function (event) {
+            const button = event.relatedTarget;
+            const postId = button.getAttribute('data-id');
+            const deleteForm = document.getElementById('deleteForm');
+            {% comment %} deleteForm.action = `{% url 'news:delete_post' 0 %}`.replace('0', postId); {% endcomment %}
+        });
+    });
+</script>
+{% endblock %}
