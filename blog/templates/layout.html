@@ -35,14 +35,14 @@
                 <a
                   class="nav-link {% if request.path == '/' %}active{% endif %}"
                   aria-current="page"
-                  href="/"
+                  href="{% url "home" %}"
                   >Home</a
                 >
               </li>
               <li class="nav-item">
                 <a
                   class="nav-link {% if request.path == '/contact/' %}active{% endif %}"
-                  href="/contact"
+                  href="{% url "contact" %}"
                   >Contact</a
                 >
               </li>
@@ -53,13 +53,32 @@
                   >News</a
                 >
               </li>
-              <li class="nav-item ms-lg-auto">
-                <a
-                  class="nav-link {% if request.path == '/users/register/' %}active{% endif %}"
-                  href="/users/register"
-                  >Register</a
-                >
-              </li>
+              {% if user.is_authenticated %}
+                <li class="nav-item ms-lg-auto">
+                  <a class="nav-link disabled text-light" aria-disabled="true">
+                    Welcome, {{ user.username }}!
+                  </a>
+                 
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="{% url 'users:logout' %}">Logout</a>
+                </li>
+              {% else %}
+                <li class="nav-item ms-lg-auto">
+                  <a
+                    class="nav-link {% if request.path == '/users/register/' %}active{% endif %}"
+                    href="{% url "users:register" %}"
+                    >Register</a
+                  >
+                </li>
+                <li class="nav-item">
+                  <a
+                    class="nav-link {% if request.path == '/users/login/' %}active{% endif %}"
+                    href="{% url "users:login" %}"
+                    >Login</a
+                  >
+                </li>
+              {% endif %}
             </ul>
           </div>
         </div>
@@ -79,5 +98,6 @@
       </h6>
     </footer>
     <script src="{% static 'bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+    {% block scripts %}{% endblock %}
   </body>
 </html>

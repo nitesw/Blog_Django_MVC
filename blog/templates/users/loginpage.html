@@ -1,0 +1,59 @@
+{% extends "layout.html" %}
+{% block title %}Login - Django Web MVC{% endblock %}
+{% block content %}
+{% load widget_tweaks %}
+<div class="container">
+    <h1 class="text-center text-light">Login page</h1>
+    <div class="d-flex h-100 flex-column">
+        <div class="d-flex w-100 justify-content-center">
+            <form 
+                id="registrationForm"
+                method="POST" 
+                class="text-light row mt-4 g-4"
+                novalidate
+            >
+                {% csrf_token %}
+                {% if form.non_field_errors %}
+                    <div class="alert alert-danger">
+                        {% for error in form.non_field_errors %}
+                        <p style="margin:0">{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+
+                <div class="col-12">
+                    <label for="{{ form.username.id_for_label }}" class="form-label">Username</label>
+                    {{ form.username|add_class:"form-control"|attr:"required" }}
+                    {% if form.username.errors %}
+                        <div class="invalid-feedback d-block">
+                        {% for error in form.username.errors %}
+                            <p style="margin:0">{{ error }}</p>
+                        {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+
+                <div class="col-12">
+                    <label for="{{ form.password.id_for_label }}" class="form-label">Password</label>
+                    {{ form.password|add_class:"form-control"|attr:"required:required" }}
+                    {% if form.password.errors %}
+                        <div class="invalid-feedback d-block">
+                        {% for error in form.password.errors %}
+                            <p style="margin:0">{{ error }}</p>
+                        {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+                <div class="col-6 w-100 d-flex justify-content-center">
+                    <button type="submit" class="btn btn-primary">
+                    Login
+                    </button>
+                </div>
+            </form>
+        </div>
+        <div class="w-100 d-flex justify-content-center mt-3 text-light">
+            Don't have an account?&nbsp;<a href="{% url 'users:register' %}">Register here</a>.
+        </div>
+    </div>
+</div>
+{% endblock content %}
